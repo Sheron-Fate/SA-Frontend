@@ -1,0 +1,297 @@
+:root{
+  --dark:#4A4A4A;
+  --accent:#A6541D;
+  --bg-card:#F7F7F7;
+  --link:#1984F0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body{
+  margin:0;
+  font-family: 'Merriweather Sans', Arial, sans-serif;
+  background:#F7F7F7;
+  color:#111;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  flex: 1; 
+}
+
+.site-header{
+  background:#F7F7F7;
+  height:80px;
+  display:flex;
+  align-items:center;
+  padding:0 40px;
+}
+.logo{
+  font-size:28px;
+  font-weight:600;
+  color:var(--accent);
+  text-decoration:none;
+}
+
+.logo img{
+  height:100px;        /* подберите под макет */
+  width:auto;
+  display:block;
+}
+
+.page-bar{
+  background:#4A4A4A;
+  color:#ffffff;
+  font-size:20px;
+  font-weight:600;
+  padding:40px 40px;
+}
+
+.container{
+  max-width:1180px;
+  margin:40px auto;
+  padding:0 40px;
+}
+
+.site-footer{
+  background:#EAEAEA;
+  padding:20px 40px;
+  margin-top:60px;
+  text-align:center;
+  font-size:14px;
+  color:#555;
+}
+
+.site-footer p{
+  max-width:700px;       
+  margin:0 auto;        
+  line-height:1.4;       
+  font-size:14px;        
+  color:#555;
+}
+
+.search-form{
+  display:flex;
+  gap:12px;
+  margin-bottom:40px;
+}
+.search-form input{
+  flex:1;
+  padding:12px 16px;
+  font-size:16px;
+  border:1px solid #ccc;
+  border-radius:8px;
+}
+.search-form button{
+  background: #4A4A4A;
+  color:#fff;
+  border:none;
+  padding:12px 24px;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.search-form button:hover{
+  opacity:0.9;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:32px;
+}
+
+.card{
+  background:var(--bg-card);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  display:flex;
+  flex-direction:column;
+}
+.card h2{margin:0 0 12px;font-size:20px;}
+.card img{width:100%;height:180px;object-fit:cover;border-radius:12px;margin-bottom:12px;}
+.short{flex:1;font-size:15px;margin:0 0 12px;}
+.card-buttons{display:flex;gap:12px;}
+.btn{
+  flex:1;
+  text-align:center;
+  padding:10px 0;
+  border-radius:8px;
+  font-weight:600;
+  text-decoration:none;
+}
+
+.card img,
+.pigment-box img {
+  border: 1px solid #ccc;   /* стандартная серая рамка */
+}
+
+.btn.more{
+  background: var(--bg-card);       /* фон как у карточки */
+  color: var(--link);               /* синий текст */
+  border: 1px solid #ccc;           /* видимая граница */
+}
+.btn.more:hover{
+  background: #fff;                 /* лёгкий hover-эффект */
+}
+
+.btn.add{
+  background: var(--bg-card);       /* фон как у карточки */
+  color: var(--link);               /* синий текст */
+  border: 1px solid #ccc;           /* видимая граница */
+}
+.btn.add:hover{
+  background: #fff;                 /* лёгкий hover-эффект */
+}
+
+
+.basket{
+  position:fixed;
+  bottom:20px;
+  left:40px;
+  background: #4A4A4A;
+  color:#fff;
+  padding:10px 18px;
+  border-radius:50px;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.basket img{
+  height:24px;        /* размер иконки корзины */
+  width:auto;
+}
+.basket .count{
+  background:#fff;
+  color:var(--link);
+  border-radius:50%;
+  padding:2px 8px;
+  font-weight:600;
+}
+
+
+.pigment-box{
+  background:#EAEAEA;
+  padding:40px;
+  max-width:700px;     
+  margin:0 auto;  
+}
+.pigment-box img{
+  width:100%;
+  max-width:600px;
+  border-radius:12px;
+  margin-top:24px;
+}
+.pigment-box p {
+    margin-top: 0;
+    margin-bottom: 0.8em;
+    line-height: 1.6;
+}
+.pigment-box h2 {
+    margin-top: 0;
+    margin-bottom: 0.4em !important;
+}
+.pigment-box h1 {
+    margin-top: 0.2em;    /* было около 0.67–1em по умолчанию */
+    margin-bottom: 0.8em; /* можно оставить стандартный низ */
+}
+
+/* Выравнивания */
+.center{ text-align:center;}
+.left{   text-align:left;   }
+
+.title{ color: #A6541D;}
+
+.img-center{
+  text-align:center;
+  margin:30px 0;
+}
+
+.img-center img {
+    max-width: 50%;         
+    height: auto;
+    display: inline-block;   
+}
+
+.center-table{
+  margin:20px auto;       /* центрирует таблицу */
+  border-collapse: collapse;
+}
+.center-table th,
+.center-table td{
+  border:1px solid #ccc;
+  padding:8px 16px;
+  text-align:center;
+}
+
+.spectrum-input{
+  width:100%;
+  padding:14px 16px;
+  font-size:18px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  margin:16px 0 32px;
+}
+
+.pigments-title{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:20px;
+}
+
+.app-services{
+  background: #EAEAEA;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  border:1px solid #ccc;
+  padding:24px;
+}
+
+.app-card{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:16px 20px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+.app-card img{
+  width:120px;
+  height:80px;
+  object-fit:cover;
+  border-radius:8px;
+}
+.app-card .info{flex:1;font-size:18px;font-weight:600;}
+.app-card .comment{
+  flex:1;
+  padding:14px 16px;
+  font-size:18px;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
+.app-card .percent{
+  width:60px;
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#F7F7F7;
+  border:2px solid var(--accent);
+  border-radius:8px;
+  font-weight:700;
+  color:var(--accent);
+  font-size:18px;
+}
+
+.Articles{
+  color: #A6541D;
+}
