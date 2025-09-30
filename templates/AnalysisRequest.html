@@ -1,0 +1,58 @@
+{{ define "AnalysisRequest.html" }}
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Заявка – ColorLex</title>
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="/pigments">
+    <img src="{{.MinioBase}}/Logo.png" alt="ColorLex">
+  </a>
+</header>
+<div class="page-bar">Заявка</div>
+
+<main class="container">
+  <h2 class="Articles">Спектроскопический анализ цвета</h2>
+  <p>Введите наблюдаемый спектр отражения в формате: Длина волны (нм), Отражательная способность (%);</p>
+  <textarea class="spectrum-input" placeholder="Например: 255,54">{{.Request.Spectrum}}</textarea>
+
+  <h3 class="pigments-title">Пигменты для расчета:</h3>
+  
+  <section class="app-services">
+    {{range .Pigments}}
+      <div class="app-card">
+        <img src="{{$.MinioBase}}/{{.ImageKey}}" alt="{{.Name}}">
+        <div class="info">
+          <strong>{{.Name}}</strong>
+          <p>{{.Brief}}</p>
+        </div>
+        <input type="text" class="comment" placeholder="Введите комментарий" value="{{.Comment}}">
+        <div class="percent">
+          {{if gt .Percent 0.0}}{{.Percent}}%{{else}}0%{{end}}
+        </div>
+      </div>
+    {{else}}
+      <p>В заявке нет пигментов</p>
+    {{end}}
+  </section>
+
+  <div style="text-align: center; margin-top: 30px;">
+    <form method="post" action="/request/delete">
+        <input type="hidden" name="id" value="{{.Request.ID}}">
+        <button type="submit" style="background: #ff4444; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer;">
+            Удалить заявку
+        </button>
+    </form>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p>Идея ColourLex основана на взаимосвязи науки и искусства.</p>
+</footer>
+</body>
+</html>
+{{ end }}

@@ -1,4 +1,4 @@
-{{ define "services.html" }}
+{{ define "Pigments.html" }}
 <!doctype html>
 <html lang="ru">
 <head>
@@ -11,37 +11,41 @@
 </head>
 <body>
 <header class="site-header">
-  <a class="logo" href="/services">
+  <a class="logo" href="/pigments">
     <img src="{{.MinioBase}}/Logo.png" alt="ColorLex">
   </a>
 </header>
 <div class="page-bar">Исторические пигменты</div>
 
 <main class="container">
-  <form method="get" action="/services" class="search-form">
-    <input type="text" name="q" placeholder="Поиск по имени / цене / дате" value="{{.Q}}">
+  <form method="get" action="/pigments" class="search-form">
+    <input type="text" name="q" placeholder="Поиск по имени" value="{{.Q}}">
     <button type="submit">Поиск</button>
   </form>
 
   <section class="grid">
-    {{range .Services}}
+    {{range .Pigments}}
     <article class="card">
       <h2>{{.Name}}</h2>
       <img src="{{$.MinioBase}}/{{.ImageKey}}" alt="{{.Name}}">
       <p class="short">{{.Brief}}</p>
       <div class="card-buttons">
-        <a href="/service?id={{.ID}}" class="btn more">Подробнее</a>
-        <a href="/application?id=app1" class="btn add">Добавить</a>
+        <a href="/pigment?id={{.ID}}" class="btn more">Подробнее</a>
+        <form method="post" action="/request/add-pigment">
+          <input type="hidden" name="pigment_id" value="{{.ID}}">
+          <button type="submit" class="btn add">Добавить</button>
+        </form>
       </div>
     </article>
     {{end}}
   </section>
 
-  <a href="/application?id=app1" class="basket">
+  {{if .RequestID}}
+  <a href="/request/{{.RequestID}}" class="basket">
     <img src="{{.MinioBase}}/cart.svg" alt="Корзина">
-    <span class="count">{{.AppCount}}</span>
+    <span class="count">{{.RequestCount}}</span>
   </a>
-
+  {{end}}
 </main>
 
 <footer class="site-footer">

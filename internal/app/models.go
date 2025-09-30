@@ -2,15 +2,18 @@ package app
 
 import "time"
 
-type Service struct {
-	ID, Name, Brief, Description, Color, Specs, ImageKey string
-	Price                                                float64
-	Date                                                 time.Time
+type Pigment struct {
+    ID, Name, Brief, Description, Color, Specs, ImageKey string
+    Price                                                float64
+    Date                                                 time.Time
 }
 
-type Application struct {
-	ID, Owner  string
-	Created    time.Time
-	ServiceIDs []string
-	Notes      string
+type AnalysisRequest struct {
+    ID, Owner  string
+    Created    time.Time
+    PigmentIDs []string
+    Notes      string
+    Comments   map[string]string
+    Percent    map[string]int
+    Spectrum   string
 }
