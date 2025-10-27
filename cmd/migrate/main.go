@@ -17,7 +17,7 @@ func main() {
         log.Fatal("failed to connect database:", err)
     }
 
-    err = db.AutoMigrate(&ds.User{}, &ds.Pigment{}, &ds.AnalysisRequest{}, &ds.RequestPigment{})
+    err = db.AutoMigrate(&ds.User{}, &ds.Pigment{}, &ds.SpectrumAnalysis{}, &ds.SpectrumAnalysisPigment{})
     if err != nil {
         log.Fatal("cant migrate db:", err)
     }

@@ -8,7 +8,7 @@ type Pigment struct {
     Date                                                 time.Time
 }
 
-type AnalysisRequest struct {
+type SpectrumAnalysisRequest struct {
     ID, Owner  string
     Created    time.Time
     PigmentIDs []string
