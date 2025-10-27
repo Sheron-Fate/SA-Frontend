@@ -2,41 +2,29 @@ package config
 
 import (
 	"os"
-
-	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 type Config struct {
-	ServiceHost string
-	ServicePort int
+	DatabaseURL  string
+	RedisAddr    string
+	RedisPassword string
+	RedisDB      int
+	JWTSecret    string
 }
 
-func NewConfig() (*Config, error) {
-	configName := "config"
-	_ = godotenv.Load()
-	if os.Getenv("CONFIG_NAME") != "" {
-		configName = os.Getenv("CONFIG_NAME")
+func LoadConfig() (*Config, error) {
+	return &Config{
+		DatabaseURL:   getEnv("DATABASE_URL", "postgres://root:password@localhost:5435/PigmentsArchive?sslmode=disable"),
+		RedisAddr:     getEnv("REDIS_ADDR", "localhost:6379"),
+		RedisPassword: getEnv("REDIS_PASSWORD", "password"),
+		RedisDB:       0,
+		JWTSecret:     getEnv("JWT_SECRET", "your-secret-key-change-in-production"),
+	}, nil
+}
+
+func getEnv(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
 	}
-
-	viper.SetConfigName(configName)
-	viper.SetConfigType("toml")
-	viper.AddConfigPath("config")
-	viper.AddConfigPath(".")
-	viper.WatchConfig()
-
-	err := viper.ReadInConfig()
-	if err != nil {
-		return nil, err
-	}
-
-	cfg := &Config{}
-	err = viper.Unmarshal(cfg)
-	if err != nil {
-		return nil, err
-	}
-
-	logrus.Info("config parsed")
-	return cfg, nil
+	return defaultValue
 }

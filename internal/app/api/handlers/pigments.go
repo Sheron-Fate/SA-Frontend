@@ -272,8 +272,11 @@ func (h *PigmentHandler) AddToSpectrumAnalysis(c *gin.Context) {
 		return
 	}
 
-	// TODO: Заглушка - текущий пользователь (пока ID=1)
-	currentUserID := uint(1)
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, types.Fail("Пользователь не аутентифицирован"))
+		return
+	}
 
 	// Проверяем существование пигмента
 	var pigment ds.Pigment
@@ -288,14 +291,14 @@ func (h *PigmentHandler) AddToSpectrumAnalysis(c *gin.Context) {
 
 	// Находим или создаем заявку в статусе draft для пользователя
 	var analysis ds.SpectrumAnalysis
-	err = h.Repository.GetDB().Where("creator_id = ? AND status = ?", currentUserID, "draft").First(&analysis).Error
+	err = h.Repository.GetDB().Where("creator_id = ? AND status = ?", userID, "draft").First(&analysis).Error
 
 	if err == gorm.ErrRecordNotFound {
 		// Создаем новую заявку
 		analysis = ds.SpectrumAnalysis{
 			Name:      "Новый анализ спектра",
 			Status:    "draft",
-			CreatorID: currentUserID,
+			CreatorID: userID.(uint),
 			Spectrum:  "",
 		}
 		if err := h.Repository.GetDB().Create(&analysis).Error; err != nil {

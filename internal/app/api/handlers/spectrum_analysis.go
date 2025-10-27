@@ -21,13 +21,27 @@ func NewSpectrumAnalysisHandler(repo *repository.Repository) *SpectrumAnalysisHa
 	return &SpectrumAnalysisHandler{Repository: repo}
 }
 
-// GET /api/spectrum-analysis/cart - иконка корзины
+// GetCart godoc
+// @Summary Получение корзины пользователя
+// @Description Возвращает информацию о корзине текущего пользователя
+// @Tags spectrum-analysis
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} map[string]interface{}
+// @Failure 401 {object} types.ErrorResponse
+// @Failure 500 {object} types.ErrorResponse
+// @Router /api/spectrum-analysis/cart [get]
 func (h *SpectrumAnalysisHandler) GetCart(c *gin.Context) {
-	currentUserID := uint(1) // TODO: Заглушка
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, types.Fail("Пользователь не аутентифицирован"))
+		return
+	}
 
 	var analysis ds.SpectrumAnalysis
 	err := h.Repository.GetDB().
-		Where("creator_id = ? AND status = ?", currentUserID, "draft").
+		Where("creator_id = ? AND status = ?", userID, "draft").
 		First(&analysis).Error
 
 	if err == gorm.ErrRecordNotFound {
@@ -55,8 +69,31 @@ func (h *SpectrumAnalysisHandler) GetCart(c *gin.Context) {
 	})
 }
 
-// GET /api/spectrum-analysis - список заявок
+// GetSpectrumAnalyses godoc
+// @Summary Получение списка заявок
+// @Description Возвращает список заявок с учетом прав доступа пользователя
+// @Tags spectrum-analysis
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param status query string false "Фильтр по статусу"
+// @Param date_from query string false "Дата начала (RFC3339)"
+// @Param date_to query string false "Дата окончания (RFC3339)"
+// @Param limit query int false "Лимит записей" default(10)
+// @Param offset query int false "Смещение" default(0)
+// @Success 200 {object} map[string]interface{}
+// @Failure 401 {object} types.ErrorResponse
+// @Failure 500 {object} types.ErrorResponse
+// @Router /api/spectrum-analysis [get]
 func (h *SpectrumAnalysisHandler) GetSpectrumAnalyses(c *gin.Context) {
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, types.Fail("Пользователь не аутентифицирован"))
+		return
+	}
+
+	isModerator, _ := c.Get("is_moderator")
+
 	var filter types.SpectrumAnalysisFilter
 	if err := c.BindQuery(&filter); err != nil {
 		c.JSON(http.StatusBadRequest, types.Fail("Неверные параметры фильтрации"))
@@ -65,6 +102,11 @@ func (h *SpectrumAnalysisHandler) GetSpectrumAnalyses(c *gin.Context) {
 
 	var analyses []ds.SpectrumAnalysis
 	db := h.Repository.GetDB().Unscoped().Where("status != ? AND status != ?", "draft", "deleted")
+
+	// Если пользователь не модератор, показываем только его заявки
+	if !isModerator.(bool) {
+		db = db.Where("creator_id = ?", userID)
+	}
 
 	// Применяем фильтры
 	if filter.Status != "" {
@@ -76,7 +118,6 @@ func (h *SpectrumAnalysisHandler) GetSpectrumAnalyses(c *gin.Context) {
 	if !filter.DateTo.IsZero() {
 		db = db.Where("formed_at <= ?", filter.DateTo)
 	}
-
 
 	if err := db.Limit(filter.Limit).Offset(filter.Offset).Find(&analyses).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, types.Fail("Ошибка получения заявок"))
@@ -181,7 +222,13 @@ func (h *SpectrumAnalysisHandler) GetSpectrumAnalysis(c *gin.Context) {
 // PUT /api/spectrum-analysis/:id/form - сформировать заявку
 func (h *SpectrumAnalysisHandler) FormSpectrumAnalysis(c *gin.Context) {
 	id := c.Param("id")
-	currentUserID := uint(1)
+
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, types.Fail("Пользователь не аутентифицирован"))
+		return
+	}
+	currentUserID := userID.(uint)
 
 	fmt.Printf("🔍 DEBUG: FormSpectrumAnalysis called with ID: %s\n", id)
 
@@ -198,8 +245,9 @@ func (h *SpectrumAnalysisHandler) FormSpectrumAnalysis(c *gin.Context) {
 	fmt.Printf("✅ DEBUG: Found analysis - ID: %s, Status: %s, CreatorID: %d\n",
 		analysis.ID.String(), analysis.Status, analysis.CreatorID)
 
-	// Проверяем права и статус
-	if analysis.CreatorID != currentUserID {
+	// Проверяем права: только создатель или модератор может формировать заявку
+	isModerator, _ := c.Get("is_moderator")
+	if analysis.CreatorID != currentUserID && !isModerator.(bool) {
 		c.JSON(http.StatusForbidden, types.Fail("Недостаточно прав"))
 		return
 	}
@@ -312,10 +360,36 @@ func (h *SpectrumAnalysisHandler) UpdateSpectrumAnalysis(c *gin.Context) {
 	})
 }
 
-// PUT /api/spectrum-analysis/:id/complete - завершить/отклонить заявку
+// CompleteSpectrumAnalysis godoc
+// @Summary Завершение/отклонение заявки
+// @Description Завершает или отклоняет заявку (только для модераторов)
+// @Tags spectrum-analysis
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "ID заявки"
+// @Param request body object{action=string} true "Действие: complete или reject"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} types.ErrorResponse
+// @Failure 401 {object} types.ErrorResponse
+// @Failure 403 {object} types.ErrorResponse
+// @Failure 404 {object} types.ErrorResponse
+// @Failure 500 {object} types.ErrorResponse
+// @Router /api/spectrum-analysis/{id}/complete [put]
 func (h *SpectrumAnalysisHandler) CompleteSpectrumAnalysis(c *gin.Context) {
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, types.Fail("Пользователь не аутентифицирован"))
+		return
+	}
+
+	isModerator, _ := c.Get("is_moderator")
+	if !isModerator.(bool) {
+		c.JSON(http.StatusForbidden, types.Fail("Недостаточно прав. Требуется роль модератора"))
+		return
+	}
+
 	id := c.Param("id")
-	currentUserID := uint(1)
 
 	var request struct {
 		Action string `json:"action" binding:"required"` // "complete" или "reject"
@@ -365,7 +439,7 @@ func (h *SpectrumAnalysisHandler) CompleteSpectrumAnalysis(c *gin.Context) {
 	updates := map[string]interface{}{
 		"status":       newStatus,
 		"completed_at": now,
-		"moderator_id": currentUserID,
+		"moderator_id": userID,
 	}
 
 	if err := h.Repository.GetDB().Unscoped().Model(&analysis).Updates(updates).Error; err != nil {
