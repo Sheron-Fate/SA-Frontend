@@ -42,6 +42,22 @@ func (h *PigmentHandler) GetPigments(c *gin.Context) {
 	if filter.Color != "" {
 		db = db.Where("color ILIKE ?", "%"+filter.Color+"%")
 	}
+	if filter.DateFrom != "" {
+		from, err := time.Parse("2006-01-02", filter.DateFrom)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, types.Fail("Неверный формат параметра date_from"))
+			return
+		}
+		db = db.Where("created_at >= ?", from)
+	}
+	if filter.DateTo != "" {
+		to, err := time.Parse("2006-01-02", filter.DateTo)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, types.Fail("Неверный формат параметра date_to"))
+			return
+		}
+		db = db.Where("created_at < ?", to.AddDate(0, 0, 1))
+	}
 
 	// Пагинация
 	db = db.Limit(filter.Limit).Offset(filter.Offset)

@@ -9,7 +9,7 @@ type CreatePigmentRequest struct {
     Specs       string `json:"specs,omitempty"`
 }
 
-// Запрос на обновление пигмента  
+// Запрос на обновление пигмента
 type UpdatePigmentRequest struct {
     Name        string `json:"name,omitempty"`
     Brief       string `json:"brief,omitempty"`
@@ -34,6 +34,8 @@ type PigmentResponse struct {
 type PigmentFilter struct {
     Search string `form:"search"`
     Color  string `form:"color"`
+    DateFrom string `form:"date_from"`
+    DateTo   string `form:"date_to"`
     Limit  int    `form:"limit,default=20"`
     Offset int    `form:"offset,default=0"`
 }

@@ -48,8 +48,9 @@
 ### 2. Redux Toolkit (см. `redux_toolkit.md`)
 1. Установить `@reduxjs/toolkit` и `react-redux`.
 2. Создать `store/index.ts` через `configureStore`, добавить `filtersSlice`:
-   - состояние: `search`, `color`, `priceRange`, `dateRange`, `persistedAt`.
-   - действия: `setSearch`, `setColor`, `setPriceRange`, `setDateRange`, `resetFilters`.
+   - состояние: `search`, `color`, `dateRange`, `persistedAt`.
+   - действия: `setSearch`, `setColor`, `setDateRange`, `resetFilters`.
+   - ценовых фильтров нет (данные без цены), вместо них используется диапазон дат `created_at`.
 3. Настроить `Provider` в `main.tsx`.
 4. Добавить типизированные хуки `useAppDispatch/useAppSelector`.
 5. Сохранение состояния: либо `redux-persist`, либо кастомный middleware (localStorage + восстановление при старте).
@@ -74,6 +75,7 @@
 - 577–991 px: `minmax(280px, 1fr)` — две карточки, фильтры перераспределяются по ширине.
 - ≤ 576 px: один столбец, фильтры и кнопки растягиваются на 100%, карточки с уменьшенной высотой изображения (150 px).
 - Карточки используют flex-раскладку, кнопка «Подробнее» прижата к низу, текст не обрезается на мобильных.
+- Блок фильтров включает поля поиска, цвета и диапазона дат `created_at`; на мобильных элементы становятся вертикальными.
 
 ### 4. PWA (см. `PWA.md`, раздел 2)
 1. Установить `vite-plugin-pwa`.
@@ -139,11 +141,12 @@
    - `build.beforeDevCommand = "npm run dev"`, `beforeBuildCommand = "npm run build"`.
    - `allowlist.http.request = true`, `scope` → `http://192.168.x.x:8080/**`.
    - `plugins.http` + `tauri-plugin-cors-fetch` (для обхода CORS в release).
-4. Создать конфиг `target_config.ts` (флаг `isTauriBuild`, базовые URL для API/изображений).
-5. Переписать `fetch`/картинки на использование `dest_api` / `dest_img`.
-6. Для build-режима отключить `basename` и `base`.
-7. Запустить `npm run tauri dev`, проверить подключение по IP.
+4. Создать общий конфиг (`src/config/target.ts`), который определяет `IS_TAURI`, `API_BASE_URL`, `MINIO_BASE_URL`, `USE_PROXY_IMAGES` (использует `VITE_TAURI_API_URL`, `VITE_TAURI_MINIO_BASE_URL` при сборке под Tauri).
+5. Переписать `fetch`/картинки на использование констант из `config/target.ts`.
+6. Для build-режима убедиться, что `import.meta.env.BASE_URL` не содержит базового префикса (уже настроено через `createBrowserRouter`).
+7. Запустить `npm run tauri dev`, проверить подключение по IP и загрузку изображений с MinIO.
 8. `npm run tauri build`, убедиться, что bundle отображает реальные данные (после правок в БД).
+9. Перед сборкой указать в `.env` значения `VITE_TAURI_API_URL` (например, `http://192.168.0.101:8080/api`) и `VITE_TAURI_MINIO_BASE_URL` (например, `http://192.168.0.101:9000/colourlex`) — они используются в `config/target.ts`.
 
 ### 8. Демонстрационный сценарий
 - PWA: установка, фильтры, возврат.
