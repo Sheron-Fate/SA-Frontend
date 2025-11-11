@@ -22,11 +22,12 @@ const PigmentCard: FC<PigmentCardProps> = ({
   const requiresProxy = USE_PROXY_IMAGES || (isHttpsContext && normalizedBase.startsWith('http://'))
   // Если хотим проксировать, используем /api/images/:key
   const proxied = requiresProxy && trimmedKey ? `/api/images/${encodeURIComponent(trimmedKey)}` : ''
+  const fallbackImage = `${import.meta.env.BASE_URL}default-pigment.png`
   const imgSrc = trimmedKey
     ? (isAbsolute
         ? trimmedKey
         : (proxied || (normalizedBase ? `${normalizedBase}/${trimmedKey}` : `/images/${trimmedKey}`)))
-    : '/default-pigment.png'
+    : fallbackImage
 
   // Отладка
   return (
@@ -35,7 +36,7 @@ const PigmentCard: FC<PigmentCardProps> = ({
         className="cardImage"
         variant="top"
         src={imgSrc}
-        onError={(e: any) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default-pigment.png' }}
+        onError={(e: any) => { e.currentTarget.onerror = null; e.currentTarget.src = fallbackImage }}
         height={100}
         width={100}
       />

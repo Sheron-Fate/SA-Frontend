@@ -49,11 +49,12 @@ export const PigmentDetailPage: FC = () => {
   const isHttpsContext = typeof window !== "undefined" && window.location.protocol === "https:"
   const requiresProxy = USE_PROXY_IMAGES || (isHttpsContext && normalizedBase.startsWith("http://"))
   const proxied = requiresProxy && trimmedKey ? `/api/images/${encodeURIComponent(trimmedKey)}` : ""
+  const fallbackImage = `${import.meta.env.BASE_URL}default-pigment.png`
   const imageUrl = trimmedKey
     ? isAbsolute
       ? trimmedKey
       : proxied || (normalizedBase ? `${normalizedBase}/${trimmedKey}` : `/images/${trimmedKey}`)
-    : "/default-pigment.png"
+    : fallbackImage
 
   const createdDate = pigment.created_at
     ? new Date(pigment.created_at)
@@ -90,7 +91,7 @@ export const PigmentDetailPage: FC = () => {
             src={imageUrl}
             onError={(e: any) => {
               (e.target as HTMLImageElement).onerror = null
-              ;(e.target as HTMLImageElement).src = "/default-pigment.png"
+              ;(e.target as HTMLImageElement).src = fallbackImage
             }}
             alt={pigment.name}
             className="pigment-detail__image"
