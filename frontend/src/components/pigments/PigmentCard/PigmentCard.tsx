@@ -1,6 +1,7 @@
 import { type FC } from 'react'
 import { Button, Card } from 'react-bootstrap'
 import './PigmentCard.css'
+import { MINIO_BASE_URL, USE_PROXY_IMAGES } from '../../../config/target'
 
 interface PigmentCardProps {
   id: number
@@ -14,12 +15,13 @@ interface PigmentCardProps {
 const PigmentCard: FC<PigmentCardProps> = ({
   id, name, brief, image_key, onCardClick
 }) => {
-  const minioBase = (import.meta as any).env?.VITE_MINIO_BASE_URL as string | undefined
-  const normalizedBase = minioBase ? minioBase.replace(/\/$/, '') : ''
+  const normalizedBase = MINIO_BASE_URL
   const trimmedKey = (image_key || '').trim()
   const isAbsolute = /^https?:\/\//i.test(trimmedKey)
-  // Если хотим всегда проксировать, используем /api/images/:key
-  const proxied = trimmedKey ? `/api/images/${encodeURIComponent(trimmedKey)}` : ''
+  const isHttpsContext = typeof window !== 'undefined' && window.location.protocol === 'https:'
+  const requiresProxy = USE_PROXY_IMAGES || (isHttpsContext && normalizedBase.startsWith('http://'))
+  // Если хотим проксировать, используем /api/images/:key
+  const proxied = requiresProxy && trimmedKey ? `/api/images/${encodeURIComponent(trimmedKey)}` : ''
   const imgSrc = trimmedKey
     ? (isAbsolute
         ? trimmedKey
@@ -27,16 +29,6 @@ const PigmentCard: FC<PigmentCardProps> = ({
     : '/default-pigment.png'
 
   // Отладка
-  console.log('PigmentCard Debug:', {
-    name,
-    image_key,
-    minioBase,
-    normalizedBase,
-    trimmedKey,
-    isAbsolute,
-    imgSrc
-  })
-
   return (
     <Card className="card" onClick={() => onCardClick(id)}>
       <Card.Img

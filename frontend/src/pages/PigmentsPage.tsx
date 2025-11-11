@@ -12,7 +12,7 @@ import { ROUTES } from "../Routes";
 import "./PigmentsPage.css";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { selectFilters } from "../features/filters/selectors";
-import { setColor, setSearch } from "../features/filters/filtersSlice";
+import { setColor, setDateRange, setSearch } from "../features/filters/filtersSlice";
 
 const PigmentsPage: FC = () => {
   const [loading, setLoading] = useState(false)
@@ -20,11 +20,16 @@ const PigmentsPage: FC = () => {
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { search, color } = useAppSelector(selectFilters)
+  const { search, color, dateRange } = useAppSelector(selectFilters)
 
   const fetchPigments = async () => {
     setLoading(true)
-    const { pigments } = await getPigments(search, color)
+    const { pigments } = await getPigments({
+      search,
+      color,
+      dateFrom: dateRange.from,
+      dateTo: dateRange.to,
+    })
     setPigments(pigments)
     setLoading(false)
   }
@@ -39,6 +44,14 @@ const PigmentsPage: FC = () => {
 
   const handleColorChange = (value: string) => {
     dispatch(setColor(value))
+  }
+
+  const handleDateFromChange = (value: string) => {
+    dispatch(setDateRange({ from: value || null, to: dateRange.to }))
+  }
+
+  const handleDateToChange = (value: string) => {
+    dispatch(setDateRange({ from: dateRange.from, to: value || null }))
   }
 
   const handleSearch = () => {
@@ -58,6 +71,10 @@ const PigmentsPage: FC = () => {
         setSearch={handleSearchValueChange}
         color={color}
         setColor={handleColorChange}
+        dateFrom={dateRange.from}
+        dateTo={dateRange.to}
+        setDateFrom={handleDateFromChange}
+        setDateTo={handleDateToChange}
         onSearch={handleSearch}
         loading={loading}
       />

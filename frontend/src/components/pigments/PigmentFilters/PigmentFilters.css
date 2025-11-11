@@ -67,6 +67,41 @@
   transform: none;
 }
 
+.filtersField__dates {
+  display: flex;
+  gap: 1rem;
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+}
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1 1 200px;
+  font-size: 0.9rem;
+  color: var(--primary-color);
+}
+
+.dateField span {
+  font-weight: 500;
+}
+
+.dateInput {
+  padding: 0.65rem 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  background-color: var(--white);
+}
+
+.dateInput:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(166, 84, 29, 0.15);
+}
+
 @media (max-width: 991px) {
   .filtersField {
     justify-content: flex-start;
@@ -74,6 +109,14 @@
 
   .colorSelect {
     flex: 1 1 200px;
+  }
+
+  .filtersField__dates {
+    flex-direction: column;
+  }
+
+  .dateField {
+    flex: 1 1 100%;
   }
 }
 
@@ -86,6 +129,14 @@
 
   .colorSelect,
   .btn {
+    width: 100%;
+  }
+
+  .filtersField__dates {
+    width: 100%;
+  }
+
+  .dateField {
     width: 100%;
   }
 }

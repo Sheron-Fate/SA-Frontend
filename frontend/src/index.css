@@ -242,3 +242,23 @@ button:focus-visible {
     max-width: 300px;
   }
 }
+
+@media (max-width: 576px) {
+  .main-content {
+    padding: 1.5rem 0;
+  }
+
+  .hero-section {
+    padding: 2.75rem 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .hero-title {
+    font-size: 1.75em;
+  }
+
+  .hero-description {
+    font-size: 1em;
+    margin-bottom: 2rem;
+  }
+}

@@ -7,12 +7,25 @@ interface PigmentFiltersProps {
   setSearch: (value: string) => void
   color: string
   setColor: (value: string) => void
+  dateFrom: string | null
+  dateTo: string | null
+  setDateFrom: (value: string) => void
+  setDateTo: (value: string) => void
   onSearch: () => void
   loading?: boolean
 }
 
 const PigmentFilters: FC<PigmentFiltersProps> = ({
-  search, setSearch, color, setColor, onSearch, loading
+  search,
+  setSearch,
+  color,
+  setColor,
+  dateFrom,
+  dateTo,
+  setDateFrom,
+  setDateTo,
+  onSearch,
+  loading,
 }) => (
   <div className="filtersField">
     <input
@@ -20,6 +33,7 @@ const PigmentFilters: FC<PigmentFiltersProps> = ({
       placeholder="Поиск по названию..."
       onChange={(event) => setSearch(event.target.value)}
       className="searchInput"
+      type="text"
     />
     <select
       value={color}
@@ -33,6 +47,26 @@ const PigmentFilters: FC<PigmentFiltersProps> = ({
       <option value="черн">Черный</option>
       <option value="бел">Белый</option>
     </select>
+    <div className="filtersField__dates">
+      <label className="dateField">
+        <span>Дата от</span>
+        <input
+          type="date"
+          className="dateInput"
+          value={dateFrom ?? ''}
+          onChange={(event) => setDateFrom(event.target.value)}
+        />
+      </label>
+      <label className="dateField">
+        <span>Дата до</span>
+        <input
+          type="date"
+          className="dateInput"
+          value={dateTo ?? ''}
+          onChange={(event) => setDateTo(event.target.value)}
+        />
+      </label>
+    </div>
     <Button disabled={loading} onClick={onSearch} variant="primary">
       {loading ? 'Поиск...' : 'Поиск'}
     </Button>
