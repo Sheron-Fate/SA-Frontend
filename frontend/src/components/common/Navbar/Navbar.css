@@ -1,0 +1,52 @@
+.custom-navbar {
+  background-color: #4A4A4A !important;
+  box-shadow: 0 2px 8px var(--shadow);
+  padding: 1rem 0; /* вернули прежнюю высоту хедера */
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.navbar-brand {
+  font-size: 1.5em !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+.navbar-brand:hover { color: #fff !important; opacity: 0.85; }
+
+.nav-link {
+  color: #fff !important;
+  font-weight: 500 !important;
+  padding: 0.5rem 1rem !important;
+  margin: 0 0.25rem !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+}
+
+.nav-link:hover { color: #fff !important; opacity: 0.85; }
+
+.nav-link.active { color: #fff !important; opacity: 1; text-decoration: underline; }
+
+.navbar-toggler {
+  border: none !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2844, 62, 80, 0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+.brand-logo {
+  height: 72px; /* подогнали под текущую высоту хедера */
+  width: auto;
+  display: block;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .brand-logo { height: 56px; }
+}

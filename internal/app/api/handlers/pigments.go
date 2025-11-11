@@ -40,7 +40,7 @@ func (h *PigmentHandler) GetPigments(c *gin.Context) {
 		db = db.Where("name ILIKE ?", "%"+filter.Search+"%")
 	}
 	if filter.Color != "" {
-		db = db.Where("color = ?", filter.Color)
+		db = db.Where("color ILIKE ?", "%"+filter.Color+"%")
 	}
 
 	// Пагинация

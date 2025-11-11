@@ -11,6 +11,9 @@ import (
 func SetupAPIRouter(router *gin.Engine, repo *repository.Repository, authMW *middleware.AuthMiddleware, usersHandler *handlers.UsersHandler, pigmentHandler *handlers.PigmentHandler, spectrumAnalysisHandler *handlers.SpectrumAnalysisHandler, spectrumAnalysisPigmentHandler *handlers.SpectrumAnalysisPigmentsHandler) {
 	api := router.Group("/api")
 	{
+        // Проксирование изображений MinIO через бэкенд
+        api.GET("/images/:key", handlers.ProxyImage)
+
 		// Аутентификация (публичные методы)
 		auth := api.Group("/auth")
 		{

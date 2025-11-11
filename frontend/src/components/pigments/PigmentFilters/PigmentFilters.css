@@ -1,0 +1,91 @@
+.filtersField {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.searchInput {
+  flex: 1 1 280px;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  background-color: var(--white);
+  min-width: 0;
+}
+
+.searchInput:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(166, 84, 29, 0.15);
+}
+
+.colorSelect {
+  flex: 0 1 200px;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+  background-color: var(--white);
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.colorSelect:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(166, 84, 29, 0.15);
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 991px) {
+  .filtersField {
+    justify-content: flex-start;
+  }
+
+  .colorSelect {
+    flex: 1 1 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .filtersField {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .colorSelect,
+  .btn {
+    width: 100%;
+  }
+}

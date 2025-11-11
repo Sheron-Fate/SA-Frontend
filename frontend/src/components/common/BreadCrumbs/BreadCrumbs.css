@@ -1,0 +1,51 @@
+:root {
+  --active_color: var(--primary-color);
+  --additional_color: var(--text-light);
+}
+
+ .breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  margin: 0 0 1.5rem 0;
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+
+.breadcrumbs * {
+  color: var(--additional_color);
+  transition: all 0.3s ease;
+}
+
+.breadcrumbs *:not(.slash):hover {
+  color: var(--secondary-color);
+}
+
+.crumb {
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--additional_color);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.crumb.current {
+  color: var(--active_color);
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.crumb:hover {
+  text-decoration: none;
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.slash {
+  color: var(--border-color) !important;
+  font-weight: 300;
+}
