@@ -1,0 +1,219 @@
+.application-page-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.application-page {
+  padding: 2rem 0;
+}
+
+.application-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.application-header h2 {
+  margin: 0;
+  color: var(--primary-color);
+  flex: 1;
+}
+
+.application-title-input {
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  flex: 1;
+}
+
+.application-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.application-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.status-draft {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.status-created {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+.status-completed {
+  background-color: #198754;
+  color: #fff;
+}
+
+.status-rejected {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.application-info {
+  padding: 1.5rem;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.application-info p {
+  margin-bottom: 0.5rem;
+}
+
+.application-spectrum {
+  padding: 1.5rem;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.application-spectrum h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.application-pigments {
+  padding: 1.5rem;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.application-pigments h3 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+}
+
+.pigments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pigment-item {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease;
+}
+
+.pigment-item:hover {
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.pigment-thumb {
+  width: 140px;
+  height: 140px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: #f4f4f4;
+}
+
+.pigment-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pigment-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.pigment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.pigment-info h4 {
+  color: var(--primary-color);
+  margin: 0;
+  flex: 1;
+}
+
+.pigment-brief {
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pigment-field {
+  margin-top: 1rem;
+}
+
+.pigment-field label {
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 0.25rem;
+}
+
+.pigment-input {
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid #d5d5d5;
+  transition: border-color 0.2s ease;
+}
+
+.pigment-input.form-control:focus {
+  box-shadow: none;
+}
+
+.pigment-input.editable {
+  border-color: #4a4a4a;
+}
+
+.pigment-input.readonly {
+  background-color: #f7f7f7;
+  color: #555;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .application-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .pigment-item {
+    flex-direction: column;
+  }
+}

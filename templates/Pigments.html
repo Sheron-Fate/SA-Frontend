@@ -1,0 +1,54 @@
+{{ define "Pigments.html" }}
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>ColorLex – Пигменты</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="/pigments">
+    <img src="{{.MinioBase}}/Logo.png" alt="ColorLex">
+  </a>
+</header>
+<div class="page-bar">Исторические пигменты</div>
+
+<main class="container">
+  <form method="get" action="/pigments" class="search-form">
+    <input type="text" name="search" placeholder="Поиск по имени" value="{{.Q}}">
+    <button type="submit">Поиск</button>
+  </form>
+
+  <section class="grid">
+    {{range .Pigments}}
+    <article class="card">
+      <h2>{{.Name}}</h2>
+      <img src="{{$.MinioBase}}/{{.ImageKey}}" alt="{{.Name}}">
+      <p class="short">{{.Brief}}</p>
+      <div class="card-buttons">
+        <a href="/pigment/{{.ID}}" class="btn more">Подробнее</a>
+        <form method="post" action="/spectrumAnalysis/add-pigment">
+          <input type="hidden" name="pigment_id" value="{{.ID}}">
+          <button type="submit" class="btn add">Добавить</button>
+        </form>
+      </div>
+    </article>
+    {{end}}
+  </section>
+
+  <a href="/spectrumAnalysis/{{if .HasActiveCart}}{{.SpectrumAnalysisID}}{{else}}empty{{end}}" class="basket">
+    <img src="{{.MinioBase}}/cart.svg" alt="Корзина">
+    <span class="count">{{.RequestCount}}</span>
+  </a>
+</main>
+
+<footer class="site-footer">
+  <p>Идея ColourLex основана на взаимосвязи науки и искусства. Чтобы оценить произведение искусства во всей его полноте, необходимо понимать технику художника и знать материалы, использованные при его создании.</p>
+</footer>
+</body>
+</html>
+{{ end }}

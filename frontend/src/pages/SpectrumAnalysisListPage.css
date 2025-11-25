@@ -1,0 +1,47 @@
+.spectrum-list {
+  padding: 32px 0;
+}
+
+.spectrum-list-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.analyses-table th,
+.analyses-table td {
+  vertical-align: middle;
+}
+
+.draft-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff8f2;
+}
+
+.draft-label {
+  margin-bottom: 4px;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #a6541d;
+  letter-spacing: 0.05em;
+}
+
+.draft-description {
+  margin-bottom: 0;
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .draft-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

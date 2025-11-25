@@ -1,0 +1,96 @@
+{{ define "AnalysisRequest.html" }}
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>{{if .RequestDeleted}}Заявка удалена{{else}}Заявка – ColorLex{{end}}</title>
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="/pigments">
+    <img src="{{.MinioBase}}/Logo.png" alt="ColorLex">
+  </a>
+</header>
+
+{{if .RequestDeleted}}
+<!-- ЗАГОЛОВОК ДЛЯ УДАЛЕННОЙ ЗАЯВКИ -->
+<div class="page-bar">Заявка удалена</div>
+{{else if .NoActiveRequest}}
+<!-- ЗАГОЛОВОК ДЛЯ ОТСУТСТВИЯ АКТИВНОЙ ЗАЯВКИ -->
+<div class="page-bar">Нет активной заявки</div>
+{{else}}
+<!-- ЗАГОЛОВОК ДЛЯ АКТИВНОЙ ЗАЯВКИ -->
+<div class="page-bar">Заявка</div>
+{{end}}
+
+<main class="container">
+  {{if .RequestDeleted}}
+  <!-- КОНТЕНТ ДЛЯ УДАЛЕННОЙ ЗАЯВКИ -->
+  <div class="pigment-box" style="text-align: center;">
+    <h1 style="color: #666; margin-bottom: 20px;">Заявка удалена</h1>
+    <p style="color: #777; margin-bottom: 30px; font-size: 16px;">
+      Эта заявка была удалена и больше недоступна для просмотра.
+    </p>
+    <a href="/pigments" class="btn more" style="display: inline-block; padding: 10px 25px;">
+      Вернуться к списку пигментов
+    </a>
+  </div>
+
+  {{else if .NoActiveRequest}}
+  <!-- КОНТЕНТ ДЛЯ ОТСУТСТВИЯ АКТИВНОЙ ЗАЯВКИ -->
+  <div class="pigment-box" style="text-align: center;">
+    <h1 style="color: #666; margin-bottom: 20px;">Нет активной заявки</h1>
+    <p style="color: #777; margin-bottom: 30px; font-size: 16px;">
+      У вас нет активной заявки для спектрального анализа.<br>
+      Добавьте пигменты из каталога для создания новой заявки.
+    </p>
+    <a href="/pigments" class="btn more" style="display: inline-block; padding: 10px 25px;">
+      Перейти к каталогу пигментов
+    </a>
+  </div>
+
+  {{else}}
+  <!-- КОНТЕНТ ДЛЯ АКТИВНОЙ ЗАЯВКИ -->
+  <h2 class="Articles">Спектроскопический анализ цвета</h2>
+  <p>Введите наблюдаемый спектр отражения в формате: Длина волны (нм), Отражательная способность (%);</p>
+  <textarea class="spectrum-input" placeholder="Например: 255,54">{{.SpectrumAnalysis.Spectrum}}</textarea>  <!-- ✅ НОВОЕ ИМЯ -->
+
+  <h3 class="pigments-title">Пигменты для расчета:</h3>
+
+  <section class="app-services">
+    {{range .Pigments}}
+      <div class="app-card">
+        <img src="{{$.MinioBase}}/{{.ImageKey}}" alt="{{.Name}}">
+        <div class="info">
+          <strong>{{.Name}}</strong>
+          <p>{{.Brief}}</p>
+        </div>
+        <input type="text" class="comment" placeholder="Введите комментарий" value="{{.Comment}}">
+        <div class="percent">
+          {{if gt .Percent 0.0}}{{.Percent}}%{{else}}0%{{end}}
+        </div>
+      </div>
+    {{else}}
+      <p>В заявке нет пигментов</p>
+    {{end}}
+  </section>
+
+  <div style="text-align: center; margin-top: 30px;">
+    <form method="post" action="/spectrumAnalysis/delete">
+        <input type="hidden" name="id" value="{{.SpectrumAnalysis.ID}}">  <!-- ✅ НОВОЕ ИМЯ -->
+        <button type="submit" style="background: #ff4444; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer;">
+            Удалить заявку
+        </button>
+    </form>
+  </div>
+  {{end}}
+</main>
+
+<footer class="site-footer">
+  <p>Идея ColourLex основана на взаимосвязи науки и искусства.</p>
+</footer>
+</body>
+</html>
+{{ end }}
